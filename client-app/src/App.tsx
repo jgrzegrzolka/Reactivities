@@ -1,6 +1,8 @@
 import React , {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
+import { Header, Icon, List } from 'semantic-ui-react'
 
 class App extends Component {
 
@@ -9,22 +11,29 @@ class App extends Component {
   }
 
   componentDidMount(){
-    this.setState({
-      values : [{ id: 1, name: 'Value 101' }, { id: 2, name: 'Value 102' }]
+
+    axios.get('http://localhost:5000/api/values').then((response) => {
+
+      this.setState({
+        values: response.data
+      });
     });
   }
 
   render(){
     return (    
-      <div className="App">
-        <header className='App-header'>
-          <img src={logo} className='App-logo' alt='logo' />
-          <ul>
-            {this.state.values.map((value: any) => (
-                <li>{value.name}</li>
-              ))}
-          </ul>
-        </header>
+
+      <div>
+        <Header as='h2'>
+          <Icon name='users' />
+          <Header.Content>reactivities</Header.Content>
+        </Header>
+
+        <List>
+          {this.state.values.map((value: any) => (
+              <List.Item key={value.id}>{value.name}</List.Item>
+            ))}
+        </List>
       </div>
     );
   }
