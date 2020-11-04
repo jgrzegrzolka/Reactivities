@@ -1,5 +1,6 @@
-import React from 'react'
-import { Grid, List } from 'semantic-ui-react'
+import React, { SyntheticEvent } from 'react'
+import { Grid } from 'semantic-ui-react'
+import LoadingComponent from '../../../app/layout/LoadingComponent'
 import { IActivity } from '../../../app/modules/activity'
 import ActivityDetails from '../details/ActivityDetails'
 import ActivityForm from '../form/ActivityForm'
@@ -14,7 +15,9 @@ interface IProps {
     setSelectedActivity: (activity: IActivity | null) => void;
     createActivity: (activity: IActivity) => void;
     editActivity: (activity: IActivity) => void;
-    deleteActivity: (id: string) => void;
+    deleteActivity: (e: SyntheticEvent<HTMLButtonElement>, id: string) => void;
+    submitting: boolean;
+    target: string;
 }
 
 const ActivityDashboard: React.FC<IProps> = ({
@@ -26,8 +29,12 @@ const ActivityDashboard: React.FC<IProps> = ({
     setSelectedActivity,
     createActivity,
     editActivity,
-    deleteActivity
+    deleteActivity,
+    submitting,
+    target
 }) => {
+
+
     return (
         <Grid>
             <Grid.Column width={10}>
@@ -35,6 +42,8 @@ const ActivityDashboard: React.FC<IProps> = ({
                 activities={activities} 
                 selectActivity={selectActivity}
                 deleteActivity={deleteActivity}
+                submitting={submitting}
+                target={target}
                 />
             </Grid.Column>
             <Grid.Column width={6}>
@@ -48,11 +57,12 @@ const ActivityDashboard: React.FC<IProps> = ({
                 }
                 { 
                     editMode && 
-                    <ActivityForm key={selectedActivity && selectedActivity.id || 0}
+                    <ActivityForm key={ (selectedActivity && selectedActivity.id) || 0}
                         setEditMode={setEditMode} 
                         activity={selectedActivity!} 
                         createActivity={createActivity}
                         editActivity={editActivity}
+                        submitting={submitting}
                         ></ActivityForm> 
                 }
             </Grid.Column>
